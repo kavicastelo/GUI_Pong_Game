@@ -70,6 +70,17 @@ s32 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, s32 n
 
 	Input input = {};
 
+	float delta_time = 0.016666f;
+	LARGE_INTEGER frame_begin_time;
+	QueryPerformanceCounter(&frame_begin_time);
+
+	float perfomance_frequency;
+	{
+		LARGE_INTEGER pref;
+		QueryPerformanceFrequency(&pref);
+		perfomance_frequency = (float)pref.QuadPart;
+	}
+
 	while (running) {
 		//input
 		for (s32 i = 0; i < BUTTON_COUNT; i++)
@@ -109,10 +120,15 @@ input.buttons[b].changed = true;\
 		}
 
 		//simutalte
-		simulate_game(&input);
+		simulate_game(&input, delta_time);
 
 		//render
 		StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmapinfo, DIB_RGB_COLORS, SRCCOPY);
+
+		LARGE_INTEGER frame_end_time;
+		QueryPerformanceCounter(&frame_end_time);
+		delta_time = (float)(frame_end_time.QuadPart - frame_begin_time.QuadPart) / perfomance_frequency;
+		frame_begin_time = frame_end_time;
 
 	}
 };

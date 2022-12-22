@@ -1,11 +1,10 @@
 #include<Windows.h>
-#include<iostream>
-using namespace std;
+#include "util.cpp";
 
 bool running = true;
 
 struct RenderState {
-	int height, width;
+	s32 height, width;
 	void* memory;
 
 	BITMAPINFO bitmapinfo;
@@ -14,7 +13,6 @@ struct RenderState {
 RenderState render_state;
 
 #include "renderer.cpp";
-#include "util.cpp";
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -31,7 +29,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		render_state.width = rect.right - rect.left;
 		render_state.height = rect.bottom - rect.top;
 
-		int size = render_state.width * render_state.height * sizeof(unsigned int);
+		s32 size = render_state.width * render_state.height * sizeof(u32);
 
 		if (render_state.memory) VirtualFree(render_state.memory, 0, MEM_RELEASE);
 		render_state.memory = VirtualAlloc(0, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
@@ -53,7 +51,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 };
 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+s32 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, s32 nShowCmd) {
 	const wchar_t CLASS_NAME[] = L"Sample Window Class";
 	const wchar_t window_title[] = L"My First Game!";
 
@@ -79,7 +77,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 		//simutalte
 		//render_background();
 		clear_screen(0xff5500);
-		draw_rectangle(50, 50, 200, 500, 0xff0000);
+		draw_rectangle(.3, 0, .1, .5, 0xff0000);
+		draw_rectangle(.2, .8, .3, .5, 0xff0000);
+		draw_rectangle(1, 2, .5, 1, 0xff0000);
+		draw_rectangle(0, 0, .2, .2, 0xff0000);
 
 		//render
 		StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmapinfo, DIB_RGB_COLORS, SRCCOPY);

@@ -8,7 +8,9 @@ float player_pos_y = 0.f;
 float player_1_p, player_1_dp, player_2_p, player_2_dp;
 float arena_half_size_x = 45, arena_half_size_y = 20;
 float player_half_size_x = 1.5, player_half_size_y = 5;
-float ball_p_x, ball_p_y, ball_dp_x = 50, ball_dp_y, ball_half_size = .5f;
+float ball_p_x, ball_p_y, ball_dp_x = 70, ball_dp_y, ball_half_size = .5f;
+
+int player_1_score, player_2_score;
 
 static void simulate_player(float *p, float *dp, float ddp, float time) {
 	ddp -= *dp * 10.f;
@@ -35,9 +37,18 @@ static void simulate_game(Input* input, float time) {
 	if (is_down(BUTTON_UP)) player_1_ddp += 1000;
 	if (is_down(BUTTON_DOWN)) player_1_ddp -= 1000;
 
+
 	float player_2_ddp = 0.f;
+#if 0 
 	if (is_down(BUTTON_W)) player_2_ddp += 1000;
 	if (is_down(BUTTON_S)) player_2_ddp -= 1000;
+#else
+	//if (ball_p_y > player_2_p + 2.f) player_2_ddp += 650;
+	//if (ball_p_y < player_2_p - 2.f) player_2_ddp -= 650;
+	player_2_ddp = (ball_p_y - player_2_p) * 100;
+	if (player_2_ddp > 650) player_2_ddp = 650;
+	if (player_2_ddp < -650) player_2_ddp = -650;
+#endif
 
 	simulate_player(&player_1_p, &player_1_dp, player_1_ddp, time);
 	simulate_player(&player_2_p, &player_2_dp, player_2_ddp, time);
@@ -80,13 +91,18 @@ static void simulate_game(Input* input, float time) {
 			ball_dp_y = 0;
 			ball_p_x = 0;
 			ball_p_y = 0;
+			player_1_score++;
 		}
 		else if (ball_p_x - ball_half_size < -arena_half_size_x) {
 			ball_dp_x *= -1;
 			ball_dp_y = 0;
 			ball_p_x = 0;
 			ball_p_y = 0;
+			player_2_score++;
 		}
+
+		draw_number(player_1_score, -10, 22, .5f, 0xaabbff);
+		draw_number(player_2_score, 10, 22, .5f, 0xaabbff);
 	
 
 	draw_rectangle(ball_p_x, ball_p_y, ball_half_size, ball_half_size, 0xffffff); // ball

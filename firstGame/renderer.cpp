@@ -44,3 +44,97 @@ void draw_rectangle(float x, float y, float half_x, float half_y, u32 color) {
 	draw_rectangle_in_pixels(x0, y0, x1, y1, color);
 
 }
+
+static void draw_number(int number, float x, float y, float size, u32 color) {
+
+	float half_size = size * .5f;
+	bool drew_num = false;
+	while (number || !drew_num)
+	{
+		drew_num = true;
+		int digit = number % 10;
+		number = number / 10;
+
+		switch (digit)
+		{
+		case 0: {
+			draw_rectangle(x - size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x, y + size * 2.f, half_size, half_size, color);
+			draw_rectangle(x, y - size * 2.f, half_size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 1: {
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			x -= size * 2.f;
+		} break;
+
+		case 2: {
+			draw_rectangle(x, y + size * 2.f, 1.5f * size, half_size, color);
+			draw_rectangle(x, y, 1.5f * size, half_size, color);
+			draw_rectangle(x, y - size * 2.f, 1.5f * size, half_size, color);
+			draw_rectangle(x + size, y + size, half_size, half_size, color);
+			draw_rectangle(x - size, y - size, half_size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 3: {
+			draw_rectangle(x - half_size, y + size * 2.f, size, half_size, color);
+			draw_rectangle(x - half_size, y, size, half_size, color);
+			draw_rectangle(x - half_size, y - size * 2.f, size, half_size, color);
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 4: {
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x - half_size, y, size, half_size, color);
+			draw_rectangle(x - size, y + size, half_size, size * 1.5f, color);
+			x -= size * 4.f;
+		} break;
+
+		case 5: {
+			draw_rectangle(x, y + size * 2.f, 1.5f * size, half_size, color);
+			draw_rectangle(x, y, 1.5f * size, half_size, color);
+			draw_rectangle(x, y - size * 2.f, 1.5f * size, half_size, color);
+			draw_rectangle(x + size, y - size, half_size, half_size, color);
+			draw_rectangle(x - size, y + size, half_size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 6: {
+			draw_rectangle(x + half_size, y + size * 2.f, size, half_size, color);
+			draw_rectangle(x + half_size, y, size, half_size, color);
+			draw_rectangle(x + half_size, y - size * 2.f, size, half_size, color);
+			draw_rectangle(x - size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x + size, y - size, half_size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 7: {
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x - half_size, y + size * 2.f, size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 8: {
+			draw_rectangle(x - size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			draw_rectangle(x, y + size * 2.f, half_size, half_size, color);
+			draw_rectangle(x, y - size * 2.f, half_size, half_size, color);
+			draw_rectangle(x, y, half_size, half_size, color);
+			x -= size * 4.f;
+		} break;
+
+		case 9: {
+			draw_rectangle(x - half_size, y + size * 2.f, size, half_size, color);
+			draw_rectangle(x - half_size, y, size, half_size, color);
+			draw_rectangle(x - half_size, y - size * 2.f, size, half_size, color);
+			draw_rectangle(x - size, y + size, half_size, half_size, color);
+			draw_rectangle(x + size, y, half_size, 2.5f * size, color);
+			x -= size * 4.f;
+		} break;
+		}
+	}
+}

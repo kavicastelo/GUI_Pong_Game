@@ -41,7 +41,6 @@ bool enemy_is_ai;
 
 static void simulate_game(Input* input, float time) {
 	clear_screen(0xff5500);
-
 	draw_rectangle(0, 0, arena_half_size_x, arena_half_size_y, 0xf1c40f); // main background
 
 	if (current_game_mode == GM_Play) {
@@ -134,16 +133,17 @@ static void simulate_game(Input* input, float time) {
 			enemy_is_ai = hot_button ? 0 : 1;
 		}
 
-		draw_text(0,0,.5f,0xff3456);
-
 		if (hot_button == 0) {
-			draw_rectangle(-20, 0, 10, 10, 0xff0000);
-			draw_rectangle(20, 0, 10, 10, 0xcccccc);
+			draw_text("SINGLE PLAYER", -40, -5, .5f, 0xff0000);
+			draw_text("MULTI PLAYER", 5, -5, .5f, 0xcccccc);
 		}
 		else {
-			draw_rectangle(-20, 0, 10, 10, 0xcccccc);
-			draw_rectangle(20, 0, 10, 10, 0xff0000);
+			draw_text("SINGLE PLAYER", -40, -5, .5f, 0xcccccc);
+			draw_text("MULTI PLAYER", 5, -5, .5f, 0xff0000);
 		}
-		
+
+		draw_text("PONG GAME", -39, 10, 1.5f, 0xff0000); //title
+
+		draw_text("DEVELOPED BY: KAVI CASTELO", 10, -21, .2f, 0x000000); //developer tag
 	}
 }

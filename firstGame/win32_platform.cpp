@@ -54,8 +54,10 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 };
 
 s32 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, s32 nShowCmd) {
+
+	ShowCursor(FALSE);
 	const wchar_t CLASS_NAME[] = L"Sample Window Class";
-	const wchar_t window_title[] = L"My First Game!";
+	const wchar_t window_title[] = L"Pong Game V 1.0.0";
 
 	//create window class
 	WNDCLASS window_class = {};

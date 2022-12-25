@@ -30,20 +30,21 @@ static void simulate_player(float *p, float *dp, float ddp, float time) {
 
 enum  game_mode
 {
-	GM_Meny,
+	GM_Menu,
 	GM_Play,
+	GM_Level,
 };
 
 game_mode current_game_mode;
 
 int hot_button;
-bool enemy_is_ai;
+bool enemy_is_ai, easy_level, access = false;
 
 static void simulate_game(Input* input, float time) {
 	clear_screen(0xff5500);
 	draw_rectangle(0, 0, arena_half_size_x, arena_half_size_y, 0xf1c40f); // main background
 
-	if (current_game_mode == GM_Play) {
+	if (current_game_mode == GM_Play && access) {
 
 		float player_1_ddp = 0.f;
 		if (is_down(BUTTON_UP)) player_1_ddp += 1000;
@@ -56,11 +57,18 @@ static void simulate_game(Input* input, float time) {
 			if (is_down(BUTTON_S)) player_2_ddp -= 1000;
 		}
 		else {
-			//if (ball_p_y > player_2_p + 2.f) player_2_ddp += 650;
-			//if (ball_p_y < player_2_p - 2.f) player_2_ddp -= 650;
-			player_2_ddp = (ball_p_y - player_2_p) * 100;
-			if (player_2_ddp > 650) player_2_ddp = 650;
-			if (player_2_ddp < -650) player_2_ddp = -650;
+		
+			if (easy_level) {
+				player_2_ddp = (ball_p_y - player_2_p) * 100;
+				if (player_2_ddp > 650) player_2_ddp = 650;
+				if (player_2_ddp < -650) player_2_ddp = -650;
+			}
+			else {
+				player_2_ddp = (ball_p_y - player_2_p) * 100;
+				if (player_2_ddp > 1050) player_2_ddp = 1050;
+				if (player_2_ddp < -1050) player_2_ddp = -1050;
+			}
+			
 		}
 
 		simulate_player(&player_1_p, &player_1_dp, player_1_ddp, time);
@@ -123,6 +131,31 @@ static void simulate_game(Input* input, float time) {
 		draw_rectangle(-40, player_2_p, 1.5, 5, 0xff0000); // container
 
 	}
+
+	else if (current_game_mode == GM_Play && enemy_is_ai) {
+
+		if (pressed(BUTTON_LEFT) || pressed(BUTTON_RIGHT)) {
+			hot_button = !hot_button;
+		}
+
+		if (pressed(BUTTON_ENTER)) {
+			easy_level = hot_button ? 0 : 1;
+			access = true;
+		}
+
+		if (hot_button == 0) {
+			draw_text("EASY MODE", -40, -5, .5f, 0xff0000);
+			draw_text("HARD MODE", 5, -5, .5f, 0xcccccc);
+		}
+		else {
+			draw_text("EASY MODE", -40, -5, .5f, 0xcccccc);
+			draw_text("HARD MODE", 5, -5, .5f, 0xff0000);
+		}
+
+		draw_text("SINGLE PLAYER", -39, 10, 1.f, 0xff0000); //title
+
+		draw_text("DEVELOPED BY: KAVI CASTELO", 10, -21, .2f, 0x000000); //developer tag
+	}
 	else {
 		if (pressed(BUTTON_LEFT) || pressed(BUTTON_RIGHT)) {
 			hot_button = !hot_button;
@@ -131,6 +164,7 @@ static void simulate_game(Input* input, float time) {
 		if (pressed(BUTTON_ENTER)) {
 			current_game_mode = GM_Play;
 			enemy_is_ai = hot_button ? 0 : 1;
+			access = hot_button ? 1 : 0;
 		}
 
 		if (hot_button == 0) {
@@ -145,5 +179,9 @@ static void simulate_game(Input* input, float time) {
 		draw_text("PONG GAME", -39, 10, 1.5f, 0xff0000); //title
 
 		draw_text("DEVELOPED BY: KAVI CASTELO", 10, -21, .2f, 0x000000); //developer tag
+	}
+
+	if (pressed(BUTTON_X)) {
+		exit(0);
 	}
 }

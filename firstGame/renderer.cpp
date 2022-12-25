@@ -45,6 +45,37 @@ void draw_rectangle(float x, float y, float half_x, float half_y, u32 color) {
 
 }
 
+const char* letters[][7]{
+	" 00 ",
+	"0  0",
+	"0  0",
+	"0000",
+	"0  0",
+	"0  0",
+	"0  0",
+};
+
+static void draw_text(float x, float y, float size, u32 color) {
+	float half_size = size * .5f;
+	float original_x = x;
+	const char** a_letter = letters[0];
+
+	for (s32 i = 0; i < 7; i++)
+	{
+		const char* row = a_letter[i];
+		while (*row)
+		{
+			if (*row == '0') {
+				draw_rectangle(x, y, half_size, half_size, color);
+			}
+			x += size;
+			row++;
+		}
+		y -= size;
+		x = original_x;
+	}
+}
+
 static void draw_number(int number, float x, float y, float size, u32 color) {
 
 	float half_size = size * .5f;
